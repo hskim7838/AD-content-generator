@@ -8,6 +8,18 @@ __pycache__/
 # C extensions
 *.so
 
+# venv
+caig/
+
+# Model
+llava-v1.6-vicuna-7b-pretrain/
+clip-vit-large-patch14-336/
+
+# Outputs
+output_demo/
+
+
+
 # Distribution / packaging
 .Python
 build/
