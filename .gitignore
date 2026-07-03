@@ -10,6 +10,8 @@ __pycache__/
 
 # venv
 caig/
+openai_meta/
+rembg/
 
 # Model
 llava-v1.6-vicuna-7b-pretrain/
@@ -18,7 +20,8 @@ clip-vit-large-patch14-336/
 # Outputs
 output_demo/
 
-
+#keys
+secrets/
 
 # Distribution / packaging
 .Python
