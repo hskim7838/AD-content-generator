@@ -44,6 +44,7 @@ if __name__ == "__main__":
         args.num_inference_steps = 30
         args.sampler_name = "Euler a"
         args.data_path = "/root/CAIG/output_demo/output_prompt.json"
+        args.negative_prompt = "duplicate bakery set on the background, other competing food items, plates with visible labels, readable text, logos, watermark, people, hands, clutter, harsh flash, overexposed highlights, distorted objects"
 
     print(args)
     pipe = T2I_CN(args)

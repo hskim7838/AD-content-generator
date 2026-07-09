@@ -19,6 +19,8 @@ Prompt_Model_Output_Path="$OUTPUT_PATH/output_prompt.json"
 # ===== OpenAI settings =====
 OPENAI_ENV="secrets/openai.env"
 STORE_INFO="Local cafe bakery, warm premium advertising mood"
+
+
 mkdir -p "$CUTOUT_DIR"
 mkdir -p "$OUTPUT_PATH"
 
@@ -40,7 +42,7 @@ python scripts/make_tiny_json_openai.py \
   --out "$base_data_path" \
   --path-prefix "$CUTOUT_DIR" \
   --store-info "$STORE_INFO" \
-  --model "gpt-5.5" 
+  --model "gpt-5.4-nano" 
 deactivate
 
 # 4. Run CAIG prompt model
@@ -56,7 +58,11 @@ accelerate launch inference_llava.py \
   --temperature 1.0
 
 # 5. Run CAIG image generation
-dir="$OUTPUT_PATH/output_image"
+#dir="$OUTPUT_PATH/output_image"
+# 모델 정보 저장 인자를 추가하면서 기존에 생성된 파일과 새로 생성되는 파일이 구분되도록 저장 경로를 다음과 같이 수정했습니다.
+RUN_ID=$(date +"%Y%m%d_%H%M%S")
+dir="$OUTPUT_PATH/output_image/$RUN_ID"
+mkdir -p "$dir"
 
 accelerate launch sample_llava.py \
   --batch_size 1 \
@@ -69,14 +75,28 @@ accelerate launch sample_llava.py \
 
 
 # 6. Evaluate generated images with CLIPScore
-EVAL_OUTPUT_DIR="$OUTPUT_PATH/eval_clip_score"
-mkdir -p "$EVAL_OUTPUT_DIR"
+EVAL_OUTPUT_DIR="$OUTPUT_PATH/eval_clip_score_2"
+MASKED_IMAGE_DIR="$EVAL_OUTPUT_DIR/masked_images" # eval_clip_score 2 용
 
-python scripts/eval_clip_score.py \
+mkdir -p "$EVAL_OUTPUT_DIR"
+mkdir -p "$MASKED_IMAGE_DIR" # eval_clip_score 2 용
+
+# 모델 정보 저장을 위해 아래 모델 관련 인자를 추가했습니다.
+# background 만 clipscore를 보기 위해 output 경로를 기존의 clip_socres에서 변경했습니다.
+# background 만 clipscore를 보기 위해 cutout 경로를 추가했습니다.
+# background 만 clipscore를 보기 위해 mask image 저장 경로를 추가했습니다.
+python scripts/eval_clip_score_2.py \
   --prompt-json "$Prompt_Model_Output_Path" \
   --image-dir "$dir" \
+  --cutout-dir "$CUTOUT_DIR" \
+  --masked-image-dir "$MASKED_IMAGE_DIR" \
   --store-info "$STORE_INFO" \
-  --output-json "$EVAL_OUTPUT_DIR/clip_scores.json" \
-  --output-csv "$EVAL_OUTPUT_DIR/clip_scores.csv"
+  --output-json "$EVAL_OUTPUT_DIR/clip_background_scores.json" \
+  --output-csv "$EVAL_OUTPUT_DIR/clip_background_scores.csv" \
+  --rembg-model "u2net" \
+  --llm-model "gpt-5.4-nano" \
+  --llava-model "$Prompt_Model_Path" \
+  --diffusion-model "$base_model_path" \
+  --controlnet-model "$controlnet_model_path"
 
 deactivate
