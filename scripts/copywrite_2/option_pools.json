@@ -1,0 +1,23 @@
+{
+  "store_info": {
+    "name": "매장명 미입력",
+    "phone": "문의 필요",
+    "price": "가격 문의"
+  },
+  "tones": [
+    "미니멀",
+    "강조형",
+    "친근한",
+    "고급스러운",
+    "위트있는"
+  ],
+  "products": [
+    "A wooden plate holding a plain butter croissant,..."
+  ],
+  "brands": [
+    "매장명 미입력"
+  ],
+  "sales": [
+    null
+  ]
+}

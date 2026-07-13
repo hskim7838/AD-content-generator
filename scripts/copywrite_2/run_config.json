@@ -1,0 +1,11 @@
+{
+  "product_attrs_path": "./tiny_dataset/jsons/bakery_croissant_cookie_coldbrew.json",
+  "tone": "친근한",
+  "product": "A wooden plate holding a plain butter croissant,...",
+  "brand": "매장명 미입력",
+  "sales": null,
+  "focusing_degree": 0.7,
+  "background": "warm sunlit cafe setup for a bakery breakfast set",
+  "background_intensity": 0.3,
+  "preservation_degree": 0.6
+}

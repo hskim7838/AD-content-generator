@@ -1,0 +1,11 @@
+{
+  "id": "bakery_croissant_cookie_coldbrew",
+  "image": "./tiny_dataset/images/bakery_croissant_cookie_coldbrew.png",
+  "new_caption": "A wooden plate holding a plain butter croissant, a chocolate-drizzled pastry, and a chocolate chip cookie, paired with a tall glass of iced cold brew coffee—warm sunlit cafe setup for a bakery breakfast set.",
+  "store_info": {
+    "store_type": "",
+    "store_name": "",
+    "location": "",
+    "highlight": ""
+  }
+}
