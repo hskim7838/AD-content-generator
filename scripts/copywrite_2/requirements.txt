@@ -1,6 +1,0 @@
-openai
-pandas
-python-dotenv
-pydantic
-pillow
-jupytext
