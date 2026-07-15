@@ -1,0 +1,33 @@
+# ── 환경 변수 / API 키 ──────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ── Python ──────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+
+# ── 가상환경 ─────────────────────────────────────────
+venv/
+.venv/
+env/
+ENV/
+
+# ── 이 프로젝트에서 실행할 때마다 자동 생성되는 산출물 ──
+tiny_dataset/
+option_pools.json
+run_config.json
+generated_copy_results.json
+generated_copy_eval_result.csv
+*.png
+
+# ── OS / 에디터 ──────────────────────────────────────
+.DS_Store
+.vscode/
+.idea/
+
+# ── 로그 ─────────────────────────────────────────────
+*.log
