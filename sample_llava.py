@@ -16,9 +16,9 @@ def get_parser():
     parser.add_argument("--negative_prompt", type=str, default="")
     parser.add_argument("--guidance_scale", type=float, default=7.5)
     parser.add_argument("--controlnet_conditioning_scale", type=float, default=1.0)
-    parser.add_argument("--width", type=int, default=512)
-    parser.add_argument("--height", type=int, default=512)
-    parser.add_argument("--image_scale", type=float, default=0.78)
+    parser.add_argument("--width", type=int, default=720)
+    parser.add_argument("--height", type=int, default=1280)
+    parser.add_argument("--image_scale", type=float, default=0.78) #원래 0.78
     parser.add_argument("--num_inference_steps", type=int, default=40)
     parser.add_argument("--eta", type=float, default=0.0)
     parser.add_argument("--low_threshold", type=int, default=100)
@@ -30,7 +30,7 @@ def get_parser():
     parser.add_argument("--save_path", type=str)
     parser.add_argument("--data_path", type=str)
     parser.add_argument("--debug", action="store_true", default=False, help="Enable debug mode")
-
+    parser.add_argument("--output_name",type=str,default=None,help="Output image name or prefix without extension",)
     return parser.parse_args()
 
 
@@ -44,7 +44,6 @@ if __name__ == "__main__":
         args.num_inference_steps = 30
         args.sampler_name = "Euler a"
         args.data_path = "/root/CAIG/output_demo/output_prompt.json"
-        args.negative_prompt = "duplicate bakery set on the background, other competing food items, plates with visible labels, readable text, logos, watermark, people, hands, clutter, harsh flash, overexposed highlights, distorted objects"
 
     print(args)
     pipe = T2I_CN(args)

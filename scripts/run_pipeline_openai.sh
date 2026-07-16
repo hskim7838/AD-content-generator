@@ -5,8 +5,8 @@ unset PYTHONPATH
 export PYTHONWARNINGS="ignore:.*copying from a non-meta parameter.*:UserWarning"
 
 # ===== paths =====
-INPUT_DIR="/home/ai3/AD-content/CAIG/tiny_dataset/images_original_test"
-CUTOUT_DIR="/home/ai3/AD-content/CAIG/tiny_dataset/images_test"
+INPUT_DIR="/home/ai3/AD-content/CAIG/tiny_dataset/images"
+CUTOUT_DIR="/home/ai3/AD-content/CAIG/tiny_dataset/images_cutout_sample"
 OUTPUT_PATH="./output_demo"
 
 Prompt_Model_Output_Path="$OUTPUT_PATH/output_prompt.json"
@@ -18,7 +18,7 @@ base_model_path="digiplay/majicMIX_realistic_v7"
 
 # ===== OpenAI settings =====
 OPENAI_ENV="secrets/openai.env"
-STORE_INFO="Local cafe bakery, warm premium advertising mood"
+# STORE_INFO="Local cafe bakery, warm premium advertising mood"
 
 PRODUCT_RATIO=80
 BRAND_RATIO=10
@@ -45,9 +45,7 @@ python inference_openai.py \
   --output_data_path "$Prompt_Model_Output_Path" \
   --generate_nums "$prompt_nums" \
   --image_dir "$CUTOUT_DIR" \
-  --temperature 0.0 \
-  --gpt-model "gpt-5.4-nano" \
-  --store-info "$STORE_INFO" \
+  --gpt-model "gpt-5.4-mini" \
   --product-ratio "$PRODUCT_RATIO" \
   --brand-ratio "$BRAND_RATIO" \
   --sales-ratio "$SALES_RATIO"
@@ -57,7 +55,7 @@ deactivate
 # 4. Run CAIG image generation
 source caig/bin/activate
 
-dir="$OUTPUT_PATH/epoch-new"
+dir="$OUTPUT_PATH/new_dataset"
 mkdir -p "$dir"
 
 accelerate launch sample_llava.py \

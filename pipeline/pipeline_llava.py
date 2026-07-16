@@ -17,7 +17,8 @@ from utils.clip_text_custom_embedder import text_embeddings
 
 import random
 from datetime import datetime
-
+import re
+from pathlib import Path
 
 from accelerate import Accelerator
 from accelerate.logging import get_logger
@@ -37,6 +38,10 @@ class TrainPolicyFuncData:
     tot_kl: float = 0
     tot_grad_norm: float = 0
 
+
+def sanitize_output_name(name):
+    name = re.sub(r"[^\w.-]+", "_", name, flags=re.UNICODE)
+    return name.strip("._") or "generated_ad"
 
 class T2I_CN:
     def __init__(self, args):
@@ -170,16 +175,39 @@ class T2I_CN:
         for idx in range(len(repainted_image)):
             current_time = datetime.now()
             format_time = current_time.strftime("%Y%m%d%H%M%S.%f")[:-4]
+        
             trans_image_path = img_path[idx]
-            name, ext = os.path.splitext(os.path.basename(trans_image_path))
+            source_name = Path(trans_image_path).stem
+        
+            self.output_counter += 1
+        
+            if self.output_name:
+                prefix = sanitize_output_name(self.output_name)
+        
+                if self.total_output_images == 1:
+                    output_filename = f"{prefix}.png"
+                else:
+                    output_filename = (
+                        f"{prefix}_{source_name}_{self.output_counter:03d}.png"
+                    )
+            else:
+                output_filename = f"{source_name}_{format_time}.png"
+        
             mask_image_arr = np.array(mask_image[idx].convert("L"))
             mask_image_arr = mask_image_arr[:, :, None]
             mask_image_arr = mask_image_arr.astype(np.float32) / 255.0
             unmasked_unchanged_image_arr = (1 - mask_image_arr) * init_image[idx] + mask_image_arr * repainted_image[idx]
             unmasked_unchanged_image = PIL.Image.fromarray(unmasked_unchanged_image_arr.round().astype("uint8"))
             os.makedirs(img_save_path, exist_ok=True)
-            output_path = os.path.join(img_save_path, "{}_{}{}".format(name, format_time, ext))
-            output_concat_prompt_path = os.path.join(concat_prompt_path, "{}_{}{}".format(name, format_time, ext))
+            output_path = os.path.join(
+                img_save_path,
+                output_filename,
+            )
+            
+            output_concat_prompt_path = os.path.join(
+                concat_prompt_path,
+                output_filename,
+            )
 
             if self.args.concat_prompt:
                 concat_prompt_image = self.concat_prompt(unmasked_unchanged_image, current_prompt[idx])
@@ -203,6 +231,8 @@ class T2I_CN:
             )
         return rewards
 
+
+    
     def batch_list(self, samples, batch_size):
         """Batch the given list into sublists of specified max size."""
         return [samples[i : i + batch_size] for i in range(0, len(samples), batch_size)]
@@ -215,7 +245,11 @@ class T2I_CN:
         self.pipe = self.prepare_model(args, device_map=device_map)
         print("start inference:")
         self.trans_pool()
-
+        
+        self.output_name = args.output_name
+        self.output_counter = 0
+        self.total_output_images = len(self.img_list)
+        
         accelerator.wait_for_everyone()
         with torch.no_grad():
             with accelerator.split_between_processes(list(zip(self.img_list, self.prompt_list))) as img_prompt:
@@ -226,9 +260,18 @@ class T2I_CN:
                     batch_image, batch_prompt = zip(*batch)
                     batch_image = list(batch_image)
                     batch_prompt = list(batch_prompt)
-                    init_image, mask_image, edge_image, post_masks = resize_and_canny(batch_image, self.preprocessor, args.image_scale, self.width, self.height, self.keep_loc, matting=False)
+                    init_image, mask_image, edge_image, post_masks = resize_and_canny(batch_image, self.preprocessor, args.image_scale, self.width, self.height, self.keep_loc, matting=True)
 
-                    generators = [torch.Generator().manual_seed(42) for _ in range(len(edge_image))]
+                    debug_mask_dir = os.path.join(self.save_path, "debug_masks")
+                    os.makedirs(debug_mask_dir, exist_ok=True)
+                    
+                    for mask_idx, post_mask in enumerate(post_masks):
+                        source_name = Path(batch_image[mask_idx]).stem
+                        post_mask.save(
+                            os.path.join(debug_mask_dir, f"{source_name}_post_mask.png")
+                        )
+                                        
+                    generators = [torch.Generator(device=device_map).manual_seed(42) for _ in range(len(edge_image))]
                     repainted_image = self.pipe(
                         prompt=batch_prompt,
                         negative_prompt=[args.negative_prompt] * len(edge_image),  # "irregular shape, extended shape, floating, table legs, pedestal, indistinct background," "irregular shape, extended shape, floating, table legs, pedestal, improper position, improper size"
@@ -255,3 +298,4 @@ class T2I_CN:
             f.write(ori_path + "\t" + gene_path + "\t" + cat_path + "\t" + prompt)
             f.write("\n")
             f.close()
+            
