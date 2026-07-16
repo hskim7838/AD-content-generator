@@ -14,7 +14,7 @@ STEP 4. compare_copy_llms.py 모듈 파일 생성 (카피 생성 함수)
 STEP 5. 랜덤 조합 9개 -> GPT 실제 호출 -> 카피 문구(title/subtitle/price/cta) 출력
 ```
 
-STEP1~5는 전부 `copywritee_step1_5.py` **한 파일 안에서 순서대로** 실행됩니다.
+STEP1~5는 전부 `copywrite_step1_5.py` **한 파일 안에서 순서대로** 실행됩니다.
 (정량 평가·시각화를 하는 STEP6/STEP7은 이 문서에서 다루지 않습니다.)
 
 ## 사전 준비
@@ -43,7 +43,7 @@ STEP2가 `INPUT_DIR`에 지정된 이미지(또는 이미지가 든 폴더)를 �
 
 1. **커맨드라인 인자로 직접 지정** (가장 우선)
    ```bash
-   python3 copywritee_step1_5.py /본인/이미지/경로/bakery.png
+   python3 copywrite_step1_5.py /본인/이미지/경로/bakery.png
    ```
 2. **`.env` 또는 환경변수**
    ```
