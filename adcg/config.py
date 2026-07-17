@@ -13,7 +13,7 @@ except ImportError:
 
 
 DIRECTIONS = ("product_focus", "brand_focus")
-LAYOUT_MODES = ("layout", "preserve
+LAYOUT_MODES = ("layout", "preserve")
 EVAL_METRICS = (
     "clip_score",
     "aesthetic_score",
