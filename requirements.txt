@@ -1,0 +1,19 @@
+# OpenAI prompting and environment configuration
+openai
+python-dotenv
+
+# Image loading, masking, and compositing
+numpy
+Pillow
+opencv-python
+rembg[gpu]
+
+# Stable Diffusion and ControlNet pipelines
+torch
+diffusers
+transformers
+accelerate
+safetensors
+
+# Image evaluation
+hpsv2 @ git+https://github.com/tgxs002/HPSv2.git@866735ecaae999fa714bd9edfa05aa2672669ee3
