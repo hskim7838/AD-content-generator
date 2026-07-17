@@ -1,0 +1,171 @@
+{
+  "products": {
+    "bakery_croissant_cookie_coldbrew": {
+      "product_attrs": {
+        "id": "bakery_croissant_cookie_coldbrew",
+        "image": "/Users/apple/Downloads/bread.png",
+        "new_caption": "A wooden plate holding a plain butter croissant, a chocolate-drizzled pastry, and a chocolate chip cookie, paired with a tall glass of iced cold brew coffee—warm sunlit cafe setup for a bakery breakfast set.",
+        "store_info": {
+          "store_type": "",
+          "store_name": "",
+          "location": "",
+          "highlight": ""
+        }
+      },
+      "store_info": {
+        "store_name": "브루웍스 커피",
+        "location": "서울 마포구 연남동",
+        "hours": "매일 08:00 - 21:00",
+        "signature": "핸드드립 & 시그니처 라떼",
+        "phone": "02-1234-5678"
+      },
+      "image": "/Users/apple/Downloads/bread.png"
+    }
+  },
+  "results": [
+    {
+      "product_id": "bakery_croissant_cookie_coldbrew",
+      "tone": "미니멀",
+      "product": "시그니처 카페라떼",
+      "brand": "브루웍스 로스터리",
+      "sales": "신메뉴 출시 기념 15% 할인",
+      "focusing_degree": 0.22,
+      "background_intensity": 0.74,
+      "preservation_degree": 0.68,
+      "model": "GPT-5.5",
+      "title": "새로운 라떼의 시작",
+      "subtitle": "브루웍스 시그니처 카페라떼",
+      "price": "신메뉴 15% 할인",
+      "cta": "연남동에서 만나보세요",
+      "latency_sec": 4.78
+    },
+    {
+      "product_id": "bakery_croissant_cookie_coldbrew",
+      "tone": "위트있는",
+      "product": "시그니처 카페라떼",
+      "brand": "브루웍스 로스터리",
+      "sales": "신메뉴 출시 기념 15% 할인",
+      "focusing_degree": 0.03,
+      "background_intensity": 0.22,
+      "preservation_degree": 0.51,
+      "model": "GPT-5.4 mini",
+      "title": "아침엔 빵커피 한판",
+      "subtitle": "크루아상·쿠키에 아이스 콜드브루",
+      "price": "신메뉴 15% 할인",
+      "cta": "브루웍스 커피에서 만나보세요",
+      "latency_sec": 8.45
+    },
+    {
+      "product_id": "bakery_croissant_cookie_coldbrew",
+      "tone": "미니멀",
+      "product": "아인슈페너",
+      "brand": "브루웍스 커피",
+      "sales": "평일 오전 1+1",
+      "focusing_degree": 0.65,
+      "background_intensity": 0.54,
+      "preservation_degree": 0.22,
+      "model": "GPT-5.4 nano",
+      "title": "아인슈페너 한 잔",
+      "subtitle": "연남동 브루웍스 커피에서",
+      "price": "",
+      "cta": "지금 방문하기",
+      "latency_sec": 1.33
+    },
+    {
+      "product_id": "bakery_croissant_cookie_coldbrew",
+      "tone": "위트있는",
+      "product": "바닐라빈 라떼",
+      "brand": "브루웍스 커피",
+      "sales": "신메뉴 출시 기념 15% 할인",
+      "focusing_degree": 0.7,
+      "background_intensity": 0.34,
+      "preservation_degree": 0.16,
+      "model": "GPT-5.5",
+      "title": "바닐라빈이 출근했어요",
+      "subtitle": "연남동 브루웍스 신메뉴 한 잔",
+      "price": "출시 기념 15% 할인",
+      "cta": "지금 맛보러 가기",
+      "latency_sec": 4.41
+    },
+    {
+      "product_id": "bakery_croissant_cookie_coldbrew",
+      "tone": "친근한",
+      "product": "시그니처 카페라떼",
+      "brand": "브루웍스 커피",
+      "sales": "2잔 구매 시 쿠키 증정",
+      "focusing_degree": 0.1,
+      "background_intensity": 0.85,
+      "preservation_degree": 0.6,
+      "model": "GPT-5.4 mini",
+      "title": "연남에서 만나는 브런치",
+      "subtitle": "크루아상과 콜드브루 한 세트",
+      "price": "",
+      "cta": "지금 브루웍스로 오세요",
+      "latency_sec": 1.84
+    },
+    {
+      "product_id": "bakery_croissant_cookie_coldbrew",
+      "tone": "미니멀",
+      "product": "아인슈페너",
+      "brand": "브루웍스 로스터리",
+      "sales": "평일 오전 1+1",
+      "focusing_degree": 0.12,
+      "background_intensity": 0.92,
+      "preservation_degree": 0.08,
+      "model": "GPT-5.4 nano",
+      "title": "아인슈페너, 브루웍스",
+      "subtitle": "핸드드립과 함께 즐겨요",
+      "price": "",
+      "cta": "지금 주문하기",
+      "latency_sec": 1.14
+    },
+    {
+      "product_id": "bakery_croissant_cookie_coldbrew",
+      "tone": "친근한",
+      "product": "아인슈페너",
+      "brand": "브루웍스 로스터리",
+      "sales": "평일 오전 1+1",
+      "focusing_degree": 0.19,
+      "background_intensity": 0.07,
+      "preservation_degree": 0.66,
+      "model": "GPT-5.5",
+      "title": "연남동 아침 커피",
+      "subtitle": "아인슈페너와 달콤한 한입",
+      "price": "평일 오전 1+1",
+      "cta": "브루웍스에서 만나요",
+      "latency_sec": 5.16
+    },
+    {
+      "product_id": "bakery_croissant_cookie_coldbrew",
+      "tone": "친근한",
+      "product": "시그니처 카페라떼",
+      "brand": "브루웍스 커피",
+      "sales": "신메뉴 출시 기념 15% 할인",
+      "focusing_degree": 0.38,
+      "background_intensity": 0.45,
+      "preservation_degree": 0.83,
+      "model": "GPT-5.4 mini",
+      "title": "브런치 한 잔",
+      "subtitle": "크루아상과 콜드브루로 가볍게",
+      "price": "신메뉴 15% 할인",
+      "cta": "지금 브루웍스에서 만나보세요",
+      "latency_sec": 5.57
+    },
+    {
+      "product_id": "bakery_croissant_cookie_coldbrew",
+      "tone": "강조형",
+      "product": "바닐라빈 라떼",
+      "brand": "브루웍스 로스터리",
+      "sales": "신메뉴 출시 기념 15% 할인",
+      "focusing_degree": 0.67,
+      "background_intensity": 0.7,
+      "preservation_degree": 0.68,
+      "model": "GPT-5.4 nano",
+      "title": "신메뉴 15% 할인",
+      "subtitle": "바닐라빈 라떼 지금 만나기",
+      "price": "15% 할인",
+      "cta": "브루웍스 커피로 오세요",
+      "latency_sec": 1.71
+    }
+  ]
+}
