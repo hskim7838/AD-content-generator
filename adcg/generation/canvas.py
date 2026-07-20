@@ -215,4 +215,14 @@ def create_condition_canvas(
         "top": top,
         "width": resized_width,
         "height": resized_height,
-        "center_x": left + r
+        "center_x": left + resized_width // 2,
+        "center_y": top + resized_height // 2,
+    }
+
+    return {
+        "resized_product": resized_product,
+        "product_layer": product_layer,
+        "condition_canvas": condition_canvas,
+        "product_mask": product_layer.getchannel("A"),
+        "placement": placement,
+    }
