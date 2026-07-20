@@ -68,4 +68,37 @@ def create_canny_control(
         2,
         int(height * max(0.0, contact_ratio)),
     )
-    contact_top = max(y, y + height - contact
+    contact_top = max(y, y + height - contact_height)
+
+    edges[
+        contact_top:y + height + 1,
+        x:x + width + 1,
+    ] = 0
+
+    truncation = truncation or {}
+    touching_edges = set(
+        truncation.get("touching_edges", [])
+    )
+    band = max(1, int(edge_suppression))
+
+    if "left" in touching_edges:
+        edges[:, x:x + band] = 0
+
+    if "right" in touching_edges:
+        edges[:, max(x, x + width - band):x + width + 1] = 0
+
+    if "top" in touching_edges:
+        edges[y:y + band, :] = 0
+
+    if "bottom" in touching_edges:
+        edges[
+            max(y, y + height - band):y + height + 1,
+            :
+        ] = 0
+
+    control = np.stack(
+        [edges, edges, edges],
+        axis=-1,
+    )
+
+    return Image.fromarray(control, mode="RGB")
