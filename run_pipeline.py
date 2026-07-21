@@ -12,6 +12,7 @@ def main():
         gpt_model=config.gpt_model,
         copy_count=getattr(config, "copy_count", 9),
         direction=config.direction,
+        focus_strength=config.focus_strength,
         layout_mode=config.layout_mode,
         seed=config.seed,
         cpu_offload=config.cpu_offload,

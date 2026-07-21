@@ -79,14 +79,24 @@ def build_user_instruction(
     product_info,
     direction,
     preprocess_context=None,
+    focus_strength=1.0,
 ):
     preprocess_context = preprocess_context or {}
+    percent = int(round(focus_strength * 100))
 
     return f"""
 Create a scene plan for the supplied foreground product image.
 
 Advertising direction:
 {direction}
+
+Product focus strength:
+{percent}%
+
+Interpret this value as how strongly the final scene should emphasize the
+product. Higher values should make the product more visually dominant and the
+surrounding background simpler and softer. Lower values may allow a more
+atmospheric or blurrier background while preserving product recognition.
 
 Product and store metadata:
 {json.dumps(product_info, ensure_ascii=False, indent=2)}
@@ -114,6 +124,7 @@ def run_prompt_generation(
     detail="low",
     preprocess_metadata_path=None,
     client=None,
+    focus_strength=1.0,
 ):
     image_path = Path(image_path)
     info_path = Path(info_path)
@@ -128,6 +139,11 @@ def run_prompt_generation(
     if detail not in {"low", "high"}:
         raise ValueError(
             "detail은 'low' 또는 'high'여야 합니다."
+        )
+
+    if not 0.0 <= focus_strength <= 1.0:
+        raise ValueError(
+            "focus_strength는 0.0부터 1.0 사이의 값이어야 합니다."
         )
 
     if not image_path.exists():
@@ -155,6 +171,7 @@ def run_prompt_generation(
                         "text": build_user_instruction(
                             product_info=product_info,
                             direction=direction,
+                            focus_strength=focus_strength,
                             preprocess_context=preprocess_context,
                         ),
                     },

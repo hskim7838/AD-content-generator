@@ -1,0 +1,91 @@
+/* 전체 앱 및 사이드바 배경 (웜 화이트 & 소프트 베이지) */
+.stApp {
+    background-color: #FDFBF7;
+}
+
+[data-testid="stSidebar"] {
+    background-color: #F4EBE1 !important;
+    border-right: 1px solid #E6DDD0;
+}
+
+/* 타이틀 및 텍스트 가독성 고정 (딥 차콜) */
+h1, h2, h3, h4, h5, h6, p, span, label {
+    color: #2B2B2B !important;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* STEP 포인트 라벨 (테라코타 오렌지) */
+h4[id^="step"] {
+    color: #D35400 !important;
+    font-weight: 700 !important;
+    letter-spacing: 1px;
+}
+
+/* 입력 필드 디자인 (화이트 박스 + 세련된 테두리) */
+[data-testid="stSidebar"] div[data-baseweb="select"] > div,
+[data-testid="stSidebar"] div[data-baseweb="input"] {
+    background-color: #FFFFFF !important;
+    border: 1px solid #D1C7BD !important;
+    border-radius: 8px !important;
+}
+
+/* 입력 필드 포커스 시 오렌지 테두리 */
+[data-testid="stSidebar"] div[data-baseweb="select"] > div:hover,
+[data-testid="stSidebar"] div[data-baseweb="input"]:focus-within {
+    border-color: #D35400 !important;
+}
+
+/* 입력창 내부 글자색 완벽 고정 (가독성 확보) */
+[data-testid="stSidebar"] input,
+[data-testid="stSidebar"] span,
+[data-testid="stSidebar"] div[data-baseweb="select"] span {
+    color: #2B2B2B !important;
+    -webkit-text-fill-color: #2B2B2B !important;
+    font-weight: 500 !important;
+}
+
+[data-testid="stSidebar"] svg {
+    fill: #6E655B !important;
+}
+
+/* 상단 헤더 투명화 */
+header[data-testid="stHeader"] {
+    background-color: transparent !important;
+}
+
+/* 실행 버튼 디자인 (포인트 테라코타 오렌지) */
+div.stButton > button {
+    background-color: #D35400 !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 0.6rem 1.5rem !important;
+    font-weight: bold !important;
+    box-shadow: 0 2px 4px rgba(211, 84, 0, 0.2) !important;
+}
+
+div.stButton > button:hover {
+    background-color: #E67E22 !important;
+}
+
+div.stButton > button p {
+    color: #FFFFFF !important;
+}
+
+/* 파일 업로더 내 버튼 */
+[data-testid="stFileUploader"] button {
+    background-color: #2B2B2B !important;
+    color: #FFFFFF !important;
+    border-radius: 6px !important;
+}
+
+/* 안내 메시지 상자 */
+div.stWarning, div.stInfo {
+    background-color: #F4EBE1 !important;
+    border: 1px solid #D1C7BD !important;
+    border-radius: 8px !important;
+}
+
+div.stWarning *, div.stInfo * {
+    color: #D35400 !important;
+}

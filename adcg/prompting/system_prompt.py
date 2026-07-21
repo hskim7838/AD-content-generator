@@ -63,6 +63,10 @@ environment that integrates naturally with the visible product.
   Preserve foreground recognition while emphasizing atmosphere, materials,
   color direction, store identity, and brand mood.
 
+[Focus Strength]
+- Higher product focus strength should make the foreground more visually dominant.
+- Lower product focus strength may allow softer, more atmospheric background treatment.
+
 [Layout Rules]
 - Determine layout dynamically for every input.
 - Do not use fixed positions, scales, or category-specific presets.
@@ -71,6 +75,8 @@ environment that integrates naturally with the visible product.
 - Keep the visible foreground prominent and physically supported.
 - product_focus should make the foreground visually dominant.
 - brand_focus may include more environmental context.
+- Within either direction, use product focus strength to control the degree of
+  foreground dominance and environmental detail.
 - Select product_x, product_y, and product_scale for the current input.
 - Keep copy space away from the foreground and major perspective lines.
 - If the input is truncated, do not move the truncated edge into an exposed

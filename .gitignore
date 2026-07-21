@@ -216,3 +216,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Personal local documentation
+ADCG_LOCAL_WORK_NOTES.md

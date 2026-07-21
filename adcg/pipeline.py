@@ -5,7 +5,7 @@ from pathlib import Path
 from .eval import run_evaluation
 from .generation import run_generation
 from .preprocessing import run_preprocess
-from .prompting import generate_ad_copy, run_prompt_generation
+from .prompting import generate_ad_copies, run_prompt_generation
 from .refinement import (
     run_core_refinement,
     run_identity_restoration,
@@ -33,13 +33,21 @@ def run_pipeline(
     layout_mode="layout",
     seed=42,
     cpu_offload=False,
+    diffusion_pipe=None,
     generation_options=None,
     core_refinement_options=None,
     identity_options=None,
     evaluate=False,
     eval_metrics=None,
     eval_options=None,
+    focus_strength=1.0,
 ):
+    focus_strength = float(focus_strength)
+    if not 0.0 <= focus_strength <= 1.0:
+        raise ValueError(
+            "focus_strength는 0.0부터 1.0 사이의 값이어야 합니다."
+        )
+
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -67,6 +75,7 @@ def run_pipeline(
         ),
         model=gpt_model,
         direction=direction,
+        focus_strength=focus_strength,
     )
 
     print("[3/7] Advertisement copy generation")
@@ -87,14 +96,12 @@ def run_pipeline(
         "",
     )
 
-    ad_copies = [
-        generate_ad_copy(
-            product_info=product_info,
-            background_prompt=background_prompt,
-            model=gpt_model,
-        )
-        for _ in range(copy_count)
-    ]
+    ad_copies = generate_ad_copies(
+        product_info=product_info,
+        background_prompt=background_prompt,
+        model=gpt_model,
+        count=copy_count,
+    )
 
     copy_json = output_dir / "02_prompt" / "ad_copy.json"
     copy_json.write_text(
@@ -129,6 +136,7 @@ def run_pipeline(
         product_image=generation_product,
         prompt_json=prompt_json,
         output_dir=output_dir / "03_generated",
+        pipe=diffusion_pipe,
         **generation_kwargs,
     )
 
@@ -136,6 +144,8 @@ def run_pipeline(
     refinement_product = preprocessed["trimmed_cutout"]
 
     print("[5/7] Core product refinement")
+
+    core_refinement_options["focus_strength"] = focus_strength
 
     core_refined = run_core_refinement(
         generated_image=generated["image"],
@@ -159,6 +169,7 @@ def run_pipeline(
         product_mask=generated["product_mask"],
         prompt_json=prompt_json,
         output_dir=output_dir / "05_final",
+        pipe=diffusion_pipe,
         **identity_kwargs,
     )
 

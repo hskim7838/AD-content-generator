@@ -33,6 +33,7 @@ class AppConfig:
     copy_count: int
     seed: int
     cpu_offload: bool
+    focus_strength: float
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -56,6 +57,15 @@ def build_parser() -> argparse.ArgumentParser:
         "--direction",
         choices=DIRECTIONS,
         default="product_focus",
+    )
+    image_generation.add_argument(
+        "--focus-strength",
+        type=float,
+        default=1.0,
+        help=(
+            "Product focus strength from 0.0 to 1.0. "
+            "Higher values emphasize the product more strongly."
+        ),
     )
     image_generation.add_argument(
         "--layout-mode",
@@ -189,6 +199,8 @@ def parse_config(argv: list[str] | None = None) -> AppConfig:
     
     if args.copy_count < 1:
         parser.error("--copy-count는 1 이상이어야 합니다.")
+    if not 0.0 <= args.focus_strength <= 1.0:
+        parser.error("--focus-strength는 0.0부터 1.0 사이여야 합니다.")
 
     output_dir.mkdir(parents=True, exist_ok=True)
     info_path = _resolve_info_path(parser, args, output_dir)
@@ -199,6 +211,7 @@ def parse_config(argv: list[str] | None = None) -> AppConfig:
         output_dir=output_dir,
         gpt_model=args.gpt_model,
         direction=args.direction,
+        focus_strength=args.focus_strength,
         layout_mode=args.layout_mode,
         copy_count=args.copy_count,
         seed=args.seed,
@@ -214,6 +227,7 @@ if __name__ == "__main__":
         "output_dir": str(config.output_dir),
         "gpt_model": config.gpt_model,
         "direction": config.direction,
+        "focus_strength": config.focus_strength,
         "layout_mode": config.layout_mode,
         "copy_count": config.copy_count,
         "seed": config.seed,

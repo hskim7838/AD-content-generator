@@ -6,7 +6,7 @@ import torch
 from PIL import Image
 
 from adcg.generation.model_loader import (
-    load_controlnet_inpaint_pipeline,
+    load_generation_pipeline,
 )
 from adcg.image_utils.blending import (
     align_product_to_mask,
@@ -49,6 +49,7 @@ def run_identity_restoration(
     controlnet_scale=0.60,
     seed=42,
     cpu_offload=False,
+    pipe=None,
 ):
     if not torch.cuda.is_available():
         raise RuntimeError("CUDA GPU is required.")
@@ -93,28 +94,36 @@ def run_identity_restoration(
         prompt_json
     )
 
-    pipe = load_controlnet_inpaint_pipeline(
-        base_model=base_model,
-        controlnet_model=controlnet_model,
-        cpu_offload=cpu_offload,
-    )
+    owns_pipe = pipe is None
+
+    if owns_pipe:
+        pipe = load_generation_pipeline(
+            base_model=base_model,
+            controlnet_model=controlnet_model,
+            cpu_offload=cpu_offload,
+        )
 
     generator = torch.Generator(
         device="cuda"
     ).manual_seed(seed)
 
-    inpainted = pipe(
-        prompt=prompt,
-        negative_prompt=negative_prompt,
-        image=base_image,
-        mask_image=Image.fromarray(inpaint_mask),
-        control_image=control_image,
-        num_inference_steps=steps,
-        guidance_scale=guidance_scale,
-        strength=strength,
-        controlnet_conditioning_scale=controlnet_scale,
-        generator=generator,
-    ).images[0].convert("RGB")
+    try:
+        inpainted = pipe(
+            prompt=prompt,
+            negative_prompt=negative_prompt,
+            image=base_image,
+            mask_image=Image.fromarray(inpaint_mask),
+            control_image=control_image,
+            num_inference_steps=steps,
+            guidance_scale=guidance_scale,
+            strength=strength,
+            controlnet_conditioning_scale=controlnet_scale,
+            generator=generator,
+        ).images[0].convert("RGB")
+    finally:
+        if owns_pipe:
+            del pipe
+            torch.cuda.empty_cache()
 
     base_array = np.asarray(base_image, dtype=np.float32)
     inpainted_array = np.asarray(inpainted, dtype=np.float32)
