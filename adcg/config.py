@@ -12,8 +12,13 @@ except ImportError:
     load_dotenv = None
 
 
-DIRECTIONS = ("product_focus", "brand_focus")
 LAYOUT_MODES = ("layout", "preserve")
+EVAL_METRICS = (
+    "clip_score",
+    "aesthetic_score",
+    "dino_similarity",
+    "hps_v2_score",
+)
 
 
 @dataclass(frozen=True)
@@ -22,13 +27,14 @@ class AppConfig:
     info_path: Path
     output_dir: Path
     gpt_model: str
-    direction: str
+    product_focus: float
+    brand_focus: float
     layout_mode: str
-    caption_model: str
-    copy_models: tuple[str, ...]
     copy_count: int
     seed: int
     cpu_offload: bool
+    evaluate: bool
+    eval_metrics: tuple[str, ...] | None
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -49,9 +55,22 @@ def build_parser() -> argparse.ArgumentParser:
     image_generation = parser.add_argument_group("image generation")
     image_generation.add_argument("--gpt-model", default="gpt-5.4-nano")
     image_generation.add_argument(
-        "--direction",
-        choices=DIRECTIONS,
-        default="product_focus",
+        "--product-focus",
+        type=float,
+        default=1.0,
+        help=(
+            "Product focus strength from 0.0 to 1.0. "
+            "Higher values emphasize the product more strongly."
+        ),
+    )
+    image_generation.add_argument(
+        "--brand-focus",
+        type=float,
+        default=0.5,
+        help=(
+            "Continuous background art direction from 0.0 (authentic "
+            "everyday environment) to 1.0 (premium purpose-built set)."
+        ),
     )
     image_generation.add_argument(
         "--layout-mode",
@@ -60,13 +79,24 @@ def build_parser() -> argparse.ArgumentParser:
     )
 
     copywriting = parser.add_argument_group("copywriting")
-    copywriting.add_argument("--caption-model", default="gpt-4o")
-    copywriting.add_argument(
-        "--copy-models",
-        nargs="+",
-        default=["gpt-5.4-nano"],
+    copywriting.add_argument("--copy-count", type=int, default=1)
+
+    evaluation = parser.add_argument_group("evaluation")
+    evaluation.add_argument(
+        "--evaluate",
+        action="store_true",
+        help="Evaluate the final image after generation.",
     )
-    copywriting.add_argument("--copy-count", type=int, default=9)
+    evaluation.add_argument(
+        "--eval-metrics",
+        nargs="+",
+        choices=EVAL_METRICS,
+        default=None,
+        help=(
+            "Metrics to run with --evaluate. "
+            "Defaults to every supported metric."
+        ),
+    )
 
     info = parser.add_argument_group("product and store information")
     info.add_argument("--product-name")
@@ -150,12 +180,15 @@ def _resolve_info_path(
 ) -> Path:
     if args.info:
         info_path = Path(args.info).expanduser()
+
         if not info_path.exists():
             parser.error(f"info JSON을 찾을 수 없습니다: {info_path}")
+
         try:
             json.loads(info_path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError) as error:
             parser.error(f"info JSON을 읽을 수 없습니다: {error}")
+
         return info_path.resolve()
 
     if not args.product_name or not args.store_name:
@@ -185,25 +218,36 @@ def parse_config(argv: list[str] | None = None) -> AppConfig:
     image_path = Path(args.image).expanduser().resolve()
     output_dir = Path(args.output_dir).expanduser().resolve()
     _validate_image(parser, image_path)
-
+    
     if args.copy_count < 1:
         parser.error("--copy-count는 1 이상이어야 합니다.")
 
     output_dir.mkdir(parents=True, exist_ok=True)
     info_path = _resolve_info_path(parser, args, output_dir)
 
+    if args.product_focus < 0.0 or args.product_focus > 1.0:
+        parser.error("--product-focus는 0.0부터 1.0 사이여야 합니다.")
+
+    if args.brand_focus < 0.0 or args.brand_focus > 1.0:
+        parser.error("--brand-focus는 0.0부터 1.0 사이여야 합니다.")
+
     return AppConfig(
         image_path=image_path,
         info_path=info_path,
         output_dir=output_dir,
         gpt_model=args.gpt_model,
-        direction=args.direction,
+        product_focus=args.product_focus,
+        brand_focus=args.brand_focus,
         layout_mode=args.layout_mode,
-        caption_model=args.caption_model,
-        copy_models=tuple(args.copy_models),
         copy_count=args.copy_count,
         seed=args.seed,
         cpu_offload=args.cpu_offload,
+        evaluate=args.evaluate,
+        eval_metrics=(
+            tuple(args.eval_metrics)
+            if args.eval_metrics is not None
+            else None
+        ),
     )
 
 
@@ -214,10 +258,8 @@ if __name__ == "__main__":
         "info_path": str(config.info_path),
         "output_dir": str(config.output_dir),
         "gpt_model": config.gpt_model,
-        "direction": config.direction,
-        "layout_mode": config.layout_mode,
-        "caption_model": config.caption_model,
-        "copy_models": list(config.copy_models),
+        "product_focus": config.product_focus,
+        "brand_focus": config.brand_focus,
         "copy_count": config.copy_count,
         "seed": config.seed,
         "cpu_offload": config.cpu_offload,

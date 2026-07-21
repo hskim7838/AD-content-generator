@@ -1,29 +1,28 @@
 import torch
 from diffusers import (
-    ControlNetModel, EulerAncestralDiscreteScheduler,
+    ControlNetModel,
+    EulerAncestralDiscreteScheduler,
     StableDiffusionControlNetInpaintPipeline,
 )
 
 
-def load_generation_pipeline(args):
-    if not torch.cuda.is_available():
-        raise RuntimeError("CUDA GPU를 찾지 못했습니다.")
+def load_generation_pipeline(
+    base_model,
+    controlnet_model,
+    cpu_offload=False,
+):
+    has_cuda = torch.cuda.is_available()
+    dtype = torch.float16 if has_cuda else torch.float32
 
-    dtype = torch.float16
-
-    print("[ControlNet 로드]")
-    print(args.controlnet_model)
-
+    print(f"[ControlNet 로드] {controlnet_model}")
     controlnet = ControlNetModel.from_pretrained(
-        args.controlnet_model,
+        controlnet_model,
         torch_dtype=dtype,
     )
 
-    print("[생성 모델 로드]")
-    print(args.base_model)
-
+    print(f"[생성 모델 로드] {base_model}")
     pipe = StableDiffusionControlNetInpaintPipeline.from_pretrained(
-        args.base_model,
+        base_model,
         controlnet=controlnet,
         torch_dtype=dtype,
         safety_checker=None,
@@ -36,30 +35,11 @@ def load_generation_pipeline(args):
     pipe.enable_attention_slicing()
     pipe.enable_vae_slicing()
 
-    if args.cpu_offload:
+    if cpu_offload and has_cuda:
         pipe.enable_model_cpu_offload()
-    else:
+    elif has_cuda:
         pipe.to("cuda")
-
-    return pipe
-
-
-def load_identity_pipeline(args):
-    controlnet = ControlNetModel.from_pretrained(
-        args.controlnet_model,
-        torch_dtype=torch.float16,
-    )
-
-    pipe = StableDiffusionControlNetInpaintPipeline.from_pretrained(
-        args.base_model,
-        controlnet=controlnet,
-        torch_dtype=torch.float16,
-        safety_checker=None,
-    )
-
-    if args.cpu_offload:
-        pipe.enable_model_cpu_offload()
     else:
-        pipe.to("cuda")
+        pipe.to("cpu")
 
     return pipe
