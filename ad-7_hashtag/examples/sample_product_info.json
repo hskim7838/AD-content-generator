@@ -1,0 +1,20 @@
+{
+  "product_name": "수제 버터 크루아상",
+  "store_name": "아침빵집",
+  "store_type": "동네 베이커리",
+  "product_category": "베이커리",
+  "product_description": "매일 아침 직접 반죽해 굽는 프랑스산 버터 크루아상입니다.",
+  "features": [
+    "프랑스산 버터 100% 사용",
+    "매일 아침 소량 생산",
+    "겉바속촉 페이스트리"
+  ],
+  "target_customer": "출근길 직장인, 브런치를 즐기는 주변 주민",
+  "promo_target": "재택 대신 출근을 시작한 20-30대 사회초년생",
+  "promotion": "오픈 기념 아메리카노 500원 할인",
+  "price": "3,800원",
+  "tone": "친근한",
+  "desired_scene": "아늑한 베이커리 진열대 위에 놓인 크루아상",
+  "additional_request": "따뜻하고 갓 구운 느낌을 강조해주세요.",
+  "draft_copy": "오늘 아침에도 갓 구운 크루아상 나왔어요, 출근길에 하나 챙겨가세요!"
+}

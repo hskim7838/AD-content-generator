@@ -1,0 +1,11 @@
+# run_pipeline(..., evaluate=True) 의 정량 평가 단계에서만 필요합니다.
+# eval/eval_clip_score_2.py, eval/eval_LAION_aesthetic_score.py,
+# eval/eval_DINO_similarity.py, eval/eval_HPS_v2.py 가 사용합니다.
+
+# clip_score / aesthetic_score / dino_similarity 는 requirements.txt의
+# torch + transformers 로 동작합니다. hps_v2_score만 아래 패키지가 추가로 필요합니다.
+
+# hpsv2: PyPI 배포판은 토크나이저 어휘 파일이 누락된 경우가 있어
+# 아래처럼 GitHub 소스에서 설치하는 것을 권장합니다.
+# pip install git+https://github.com/tgxs002/HPSv2.git
+hpsv2

@@ -1,0 +1,25 @@
+# adcg 전체 파이프라인 실행에 필요한 패키지
+# (텍스트 생성만 필요하면 requirements-text.txt만 설치해도 충분합니다)
+
+# --- 공통 / 텍스트 생성 (카피, 해시태그) ---
+openai>=1.40.0
+python-dotenv>=1.0.0
+
+# --- 이미지 전처리 / 배경 제거 ---
+Pillow>=10.0.0
+numpy>=1.26.0
+opencv-python>=4.9.0
+rembg>=2.0.57
+
+# --- 조건부 확산 생성 (ControlNet + SDXL/SD, GPU 필요) ---
+torch>=2.2.0
+diffusers>=0.27.0
+transformers>=4.40.0
+accelerate>=0.30.0
+safetensors>=0.4.2
+
+# 참고:
+# - torch는 CUDA 빌드가 필요합니다. GPU/CUDA 버전에 맞는 설치 명령은
+#   https://pytorch.org/get-started/locally/ 에서 확인 후 별도로 설치하세요.
+#   예) pip install torch --index-url https://download.pytorch.org/whl/cu121
+# - --evaluate 옵션(정량 평가)을 사용하려면 requirements-eval.txt도 설치하세요.
