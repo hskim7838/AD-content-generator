@@ -162,18 +162,34 @@ TONE_OPTIONS = (
 두 필드 모두 값이 없으면(`""` 또는 생략) 그냥 무시되므로, 필수 입력은
 아닙니다.
 
-## Google Colab에서 실행하기
+## hashtag_only.py가 이제 어떤 입력이든 받을 수 있게 됐어요. 4가지 방식을 지원합니다.
 
-`colab/` 폴더에 Colab용 노트북 2개를 준비해뒀습니다.
+1) 아무 옵션 없이 실행 → 기존 내장 예시 5개
+```
+bash
+python examples/hashtag_only.py
+python examples/hashtag_only.py --example 3   # 하나만
+```
+2) CLI로 아무 필드나 직접 입력 (다 선택 사항, 일부만 넣어도 됨)
+```
+bash
+python examples/hashtag_only.py \
+    --product-name "수제 캔들" --store-name "포근한 밤" \
+    --tone 레트로한 \
+    --hashtag-count 3 --max-chars 20
+```
+tone은 TONE_OPTIONS 목록에 없는 값(레트로한)도 그대로 받아들이고, --hashtag-count/--max-chars로 프리셋(짧게/보통/긴) 대신 숫자를 직접 지정할 수도 있습니다.
 
-- **`colab/adcg_colab_text_only.ipynb`** — 카피 + 해시태그 생성만.
-  GPU 불필요, 필요한 코드가 노트북 안에 전부 들어있어 이 zip을 업로드하지
-  않아도 바로 실행됩니다. Colab에서 파일을 열고 `런타임 → 모두 실행`만
-  누르면, API 키 입력 후 폼(Form) 필드로 상품 정보를 채워 결과를 받습니다.
-- **`colab/adcg_colab_full_pipeline.ipynb`** — 이미지 생성까지 포함한 전체
-  파이프라인. `런타임 유형을 T4 GPU 이상으로 변경`한 뒤, 노트북 안내에 따라
-  이 프로젝트의 `adcg_project.zip`을 업로드(또는 Drive 마운트)하고 실행하면
-  `requirements.txt`를 설치하고 `run_pipeline()`을 그대로 호출합니다.
+3) JSON 파일로 입력
+```
+bash
+python examples/hashtag_only.py --info my_product.json --copy-length 긴
+```
+JSON 파일 값 + CLI로 추가 필드를 덮어쓸 수 있어요.
 
-두 노트북 다 `.ipynb`를 Colab(colab.research.google.com)에 업로드하거나
-Google Drive에 넣고 "Colab으로 열기"로 실행하면 됩니다.
+4) 대화형 입력
+```
+bash
+python examples/hashtag_only.py --interactive
+```
+터미널에서 상품명/매장명/tone 등을 하나씩 물어봅니다.
